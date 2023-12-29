@@ -6,3 +6,10 @@ make
 ./tests
 ```
 
+2. 使用cuda进行颜色翻转
+```
+cd build && cmake .. && make
+./main
+```
+![origin](./input.jpg)
+![result](./output.jpg)

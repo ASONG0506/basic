@@ -34,3 +34,9 @@ target_link_libraries(tests
 # Add a test target
 enable_testing()
 add_test(NAME ResizeTest COMMAND tests)
+
+
+cuda_add_executable(main main.cu)
+target_link_libraries(main 
+    ${CUDA_LIBRARIES}
+    ${OpenCV_LIBRARIES})
