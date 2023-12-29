@@ -13,6 +13,13 @@ TEST(PreprocessTest1, NearestSamplerTest) {
     int src_img_w = 1280;
     int dst_img_h = 360;
     int dst_img_w = 640;
+    float resize_radio_h = 0.5;
+    float resize_radio_w = 0.5;
+    int crop_h = 0;
+    int crop_w = 0;
+    triplet mean = {0,0,0};
+    triplet std = {1,1,1};
+    Sampler sample = Sampler::nearest;
 
     //get input images
     cv::Mat img = cv::imread("../input.jpg");
@@ -28,15 +35,6 @@ TEST(PreprocessTest1, NearestSamplerTest) {
 
     // set dst images
     float* dst_imgs = new float[dst_img_h*dst_img_w*src_c];
-
-    float resize_radio_h = 0.5;
-    float resize_radio_w = 0.5;
-    int crop_h = 0;
-    int crop_w = 0;
-    triplet mean = {0,0,0};
-    triplet std = {1,1,1};
-    Sampler sample = Sampler::nearest;
-
     // Call the preprocess function
     int result = preprocess(src_imgs, dst_imgs, n_img, src_img_h, src_img_w,
                              dst_img_h, dst_img_w, resize_radio_h, resize_radio_w,
@@ -45,16 +43,21 @@ TEST(PreprocessTest1, NearestSamplerTest) {
 
     // prepare output image showing
     int o_img_size=dst_img_h*dst_img_w*src_c;
-    int* uchar_data = new int[o_img_size];
+    uchar* uchar_data = new uchar[o_img_size];
     for(int i=0; i<o_img_size; i++){
-        if (i % 1000 == 0){
+        if (i % 5000 == 0){
             std::cout<<static_cast<uint>(src_imgs[i])<<" "<<dst_imgs[i]<<std::endl;
         }
-        uchar_data[i]=static_cast<int>(dst_imgs[i]);
+        uchar_data[i]=static_cast<uchar>(dst_imgs[i]);
     }
     cv::Mat dst_img(dst_img_h, dst_img_w, CV_8UC(src_c));
     memcpy(dst_img.data, uchar_data, o_img_size*sizeof(uchar));
     cv::imshow("output", dst_img);
+    cv::waitKey(0);
+
+    cv::Mat res1=cv::Mat::zeros(src_h, src_w, CV_8UC3);
+    memcpy(res1.data, src_imgs, src_h*src_w*src_c*sizeof(uchar));
+    cv::imshow("input1", res1);
     cv::waitKey(0);
     // Add your assertions based on the expected result
     EXPECT_EQ(result, EXIT_SUCCESS);
