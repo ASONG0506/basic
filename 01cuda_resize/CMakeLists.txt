@@ -40,3 +40,8 @@ cuda_add_executable(main main.cu)
 target_link_libraries(main 
     ${CUDA_LIBRARIES}
     ${OpenCV_LIBRARIES})
+
+cuda_add_executable(demo_color_channel_invert demo_color_channel_invert.cu)
+target_link_libraries(demo_color_channel_invert 
+        ${CUDA_LIBRARIES}
+        ${OpenCV_LIBRARIES})
